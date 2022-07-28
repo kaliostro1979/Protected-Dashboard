@@ -1,4 +1,4 @@
-import {LOGIN_USER, REGISTER_USER} from "../types";
+import {LOGIN_USER, REGISTER_USER, RESET_TO_INITIAL_STATE} from "../types";
 
 const initialState = null
 
@@ -8,6 +8,8 @@ export const userReducer = (state = initialState, action)=>{
             return action.payload
         case LOGIN_USER:
             return action.payload
+        case RESET_TO_INITIAL_STATE:
+            return initialState
         default:
             return state
     }

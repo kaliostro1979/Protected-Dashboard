@@ -29,8 +29,10 @@ const Dashboard = () => {
     }, [dispatch, token])
 
     useEffect(() => {
-        if (score && parseInt(score.score.userScore) >= parseInt(score.score.max / 2)) {
-            setPassed(true)
+        if (score){
+            if (score.score && parseInt(score.score.userScore) >= parseInt(score.score.max / 2)) {
+                setPassed(true)
+            }
         }
     }, [score])
 
@@ -50,9 +52,9 @@ const Dashboard = () => {
                         <Card className={"score-results__card"} sx={{mt: 30}}>
                             <Typography component="strong" variant="h5" className={"score-results__heading"} display={"block"} sx={{fontWeight: "medium", mb: 1}}>Exam result</Typography>
                             <Typography component="p" variant="caption">Your score is</Typography>
-                            <Typography component="span" variant="h5" sx={{mr: 0.5}} className={"score-results__value"}>{score.score.userScore || 9}</Typography>
+                            <Typography component="span" variant="h5" sx={{mr: 0.5}} className={"score-results__value"}>{score.score ? score.score.userScore : "9"}</Typography>
                             <Typography component="span" variant="h5" sx={{mr: 0.5}} className={"score-results__value"}>of</Typography>
-                            <Typography component="span" variant="h5" className={"score-results__value"}>{score.score.max || 10}</Typography>
+                            <Typography component="span" variant="h5" className={"score-results__value"}>{score.score ? score.score.max : "10"}</Typography>
                             <Typography component="p" variant="caption" sx={{textTransform: "uppercase"}}>{passed ? "Passed" : "Not Passed"}</Typography>
                         </Card> : null
                 }

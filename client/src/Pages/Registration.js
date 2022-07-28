@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {registerUser} from "../redux/actions/userAction";
+import {registerUser, resetToInitialState} from "../redux/actions/userAction";
 import {Link, useNavigate} from "react-router-dom";
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
 import FormHeader from "../Components/FormHeader";
@@ -16,13 +16,20 @@ const Registration = () => {
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
 
+    useEffect(()=>{
+        dispatch(resetToInitialState())
+    }, [dispatch])
+
     useEffect(() => {
         if (response) {
-            if (response.user){
-                navigate('/login')
+            if (response.status === "success"){
+               /* navigate('/login')*/
+                //window.location.reload()
             }else {
                 setError(response.error)
             }
+        }else {
+            setError("")
         }
     }, [response, navigate])
 
@@ -53,21 +60,20 @@ const Registration = () => {
             <Box component="form" noValidate sx={{mt: 1}} className={'form-main'} onSubmit={(e) => handleSubmit(e)}>
                 <FormHeader heading={"Register account"} icon={<LockOpenOutlinedIcon/>}/>
                 <TextField
+                    error={error !== ""}
                     margin="normal"
                     required
                     fullWidth
                     id="email"
                     label="Email Address"
+                    type="email"
                     name="email"
                     autoComplete="email"
                     autoFocus
                     onChange={(e) => handleInput(e)}
                     value={email}
+                    helperText={error ? error : ""}
                 />
-                {
-                    error ? <Typography className={'error'} variant={'caption'}>{error}</Typography> : null
-                }
-
                 <TextField
                     margin="normal"
                     required

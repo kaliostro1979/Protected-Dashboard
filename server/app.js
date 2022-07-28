@@ -30,22 +30,20 @@ app.post('/api/login', async (req, res)=>{
         email: req.body.email
     })
 
-    console.log(user);
-
     const validPass = await bcrypt.compare(req.body.password, user.password)
 
     if (validPass){
-        const token = jwt.sign({email: user.email}, 'secret123')
+        const token = jwt.sign({email: user.email}, 'somesecretword')
         return res.json({status: 'success', user: token, score: user.score})
     }else {
-        return res.json({status: 'error', user: false})
+        return res.json({status: 'error', user: false, errorMessage: "Email or password incorrect"})
     }
 })
 
 app.get('/api/dashboard', async (req, res)=>{
     const token = req.headers['x-access-token']
     try {
-        const decoded = jwt.verify(token, 'secret123')
+        const decoded = jwt.verify(token, 'somesecretword')
         const email = decoded.email
         const user = await User.findOne({email: email})
         return res.json({status: 'success'})
@@ -59,7 +57,7 @@ app.get('/api/score', async (req, res)=>{
     const token = req.headers['x-access-token']
 
     try {
-        const decoded = jwt.verify(token, 'secret123')
+        const decoded = jwt.verify(token, 'somesecretword')
         const email = decoded.email
         const user = await User.findOne({email: email})
         return res.json({status: 'success', score: user.score})

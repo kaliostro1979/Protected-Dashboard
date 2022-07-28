@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, TextField, Typography} from "@mui/material";
+import {Box, Button, TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {loginUser} from "../redux/actions/userAction";
-import {Link, useNavigate} from 'react-router-dom'
+import {loginUser, resetToInitialState} from "../redux/actions/userAction";
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import FormHeader from "../Components/FormHeader";
 
@@ -14,7 +14,11 @@ const Login = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState(false)
+    const [error, setError] = useState("")
+
+    useEffect(()=>{
+        dispatch(resetToInitialState())
+    }, [dispatch])
 
     useEffect(() => {
         if (response) {
@@ -23,9 +27,11 @@ const Login = () => {
                 navigate('/dashboard')
             }
 
-            if (response.error) {
-                setError(true)
+            if (response.status === "error") {
+                setError(response.errorMessage)
             }
+        }else {
+            setError("")
         }
     }, [navigate, response])
 
@@ -53,11 +59,8 @@ const Login = () => {
         <div className={'form-wrapper'}>
             <Box component="form" noValidate sx={{mt: 1}} className={'form-main'} onSubmit={(e) => handleSubmit(e)}>
                 <FormHeader heading={"Sign in"} icon={<LockOutlinedIcon/>}/>
-
-                {
-                    error ? <Typography className={'error'} variant={'caption'}>Login or password is incorrect</Typography> : null
-                }
                 <TextField
+                    error={error !== ""}
                     margin="normal"
                     required
                     fullWidth
@@ -68,6 +71,7 @@ const Login = () => {
                     autoFocus
                     onChange={(e) => handleInput(e)}
                     value={email}
+                    helperText={error ? error : ""}
                 />
                 <TextField
                     margin="normal"

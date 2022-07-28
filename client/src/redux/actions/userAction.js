@@ -1,4 +1,4 @@
-import {LOGIN_USER, REGISTER_USER} from "../types";
+import {LOGIN_USER, REGISTER_USER, RESET_TO_INITIAL_STATE} from "../types";
 
 export const registerUser = (data)=>{
     return async (dispatch)=>{
@@ -40,5 +40,11 @@ export const loginUserAction = (data)=>{
     return {
         type: LOGIN_USER,
         payload: data
+    }
+}
+
+export const resetToInitialState = ()=>{
+    return {
+        type: RESET_TO_INITIAL_STATE
     }
 }

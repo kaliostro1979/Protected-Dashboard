@@ -1,0 +1,3 @@
+export const REGISTER_USER = 'REGISTER/USER'
+export const LOGIN_USER = 'LOGIN/USER'
+export const GET_USER_SCORE = 'GET/USER/SCORE'

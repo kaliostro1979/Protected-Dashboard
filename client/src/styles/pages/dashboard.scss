@@ -1,0 +1,26 @@
+.dashboard-wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-results__card {
+  width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+
+  p{
+    color: $color-gray;
+  }
+}
+
+.score-results__heading {
+  color: $color-blue;
+}
+
+.score-results__value {
+  color: $color-black;
+}

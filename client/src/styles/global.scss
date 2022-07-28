@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Archivo", sans-serif;
+  background-color: $color-light-gray;
+}
+
+a {
+  text-decoration: none;
+  color: $color-blue;
+}
+
+.container {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.error {
+  color: #CC0000;
+  font-size: 12px!important;
+}
+
+.error-field {
+  border-color: #CC0000;
+}

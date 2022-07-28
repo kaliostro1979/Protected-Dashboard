@@ -14,15 +14,14 @@ mongoose.connect('mongodb+srv://Altair:05507Misha3343@cluster0.zl4tna4.mongodb.n
 
 app.post('/api/register', async (req, res)=>{
     try {
-        const hushedPassword = bcrypt.hash(req.body.password, 15)
-        const user = await User.create({
-            name: req.body.name,
+        const hushedPassword = await bcrypt.hash(req.body.password, 15)
+        await User.create({
             email: req.body.email,
             password: hushedPassword
         })
         res.json({status: 'success'})
     }catch (error){
-        res.json({status: 'error', error: 'Duplicate email'})
+        res.json({status: 'error', error: 'Email already exist'})
     }
 })
 
@@ -31,11 +30,13 @@ app.post('/api/login', async (req, res)=>{
         email: req.body.email
     })
 
+    console.log(user);
+
     const validPass = await bcrypt.compare(req.body.password, user.password)
 
     if (validPass){
-        const token = jwt.sign({email: user.email, name: user.name}, 'secret123')
-        return res.json({status: 'success', user: token})
+        const token = jwt.sign({email: user.email}, 'secret123')
+        return res.json({status: 'success', user: token, score: user.score})
     }else {
         return res.json({status: 'error', user: false})
     }
@@ -47,12 +48,29 @@ app.get('/api/dashboard', async (req, res)=>{
         const decoded = jwt.verify(token, 'secret123')
         const email = decoded.email
         const user = await User.findOne({email: email})
+        return res.json({status: 'success'})
+    }catch (error){
+        console.log(error)
+        res.json({status: 'error', error: 'Invalid token'})
+    }
+})
+
+app.get('/api/score', async (req, res)=>{
+    const token = req.headers['x-access-token']
+
+    try {
+        const decoded = jwt.verify(token, 'secret123')
+        const email = decoded.email
+        const user = await User.findOne({email: email})
         return res.json({status: 'success', score: user.score})
     }catch (error){
         console.log(error)
         res.json({status: 'error', error: 'Invalid token'})
     }
 })
+
+
+
 
 app.listen(PORT, ()=>{
     console.log(`Server started at port ${PORT}`)
